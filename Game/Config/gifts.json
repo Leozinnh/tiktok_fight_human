@@ -1,0 +1,49 @@
+{
+	"version": 1,
+	"defaults": {
+		"maxQueuedPerUser": 12,
+		"userCooldownMs": 900
+	},
+	"gifts": {
+		"Rose": {
+			"attack": "bat",
+			"countMode": "perUnit",
+			"damageMultiplier": 1.0
+		},
+		"Heart": {
+			"attack": "slap",
+			"countMode": "perUnit",
+			"damageMultiplier": 1.0
+		},
+		"Ice Cream": {
+			"attack": "punch",
+			"countMode": "single",
+			"damageMultiplier": 1.0
+		},
+		"Hand Hearts": {
+			"attack": "kick",
+			"countMode": "single",
+			"damageMultiplier": 1.2
+		},
+		"Finger Heart": {
+			"attack": "push",
+			"countMode": "perUnit",
+			"damageMultiplier": 0.8
+		},
+		"Donut": {
+			"attack": "sequence",
+			"countMode": "single",
+			"damageMultiplier": 1.0
+		},
+		"Galaxy": {
+			"attack": "cine_special",
+			"countMode": "single",
+			"damageMultiplier": 1.0
+		},
+		"Universe": {
+			"attack": "cine_special",
+			"countMode": "single",
+			"damageMultiplier": 1.5
+		}
+	}
+}

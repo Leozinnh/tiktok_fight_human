@@ -1,0 +1,20 @@
+{
+	"version": 1,
+	"queue": {
+		"slotMs": 900,
+		"maxPending": 200,
+		"antiStarvationSlots": 12,
+		"maxConcurrentAttacks": 1
+	},
+	"hype": {
+		"threshold": 15,
+		"cooldownMs": 20000
+	},
+	"damage": {
+		"regionFalloff": 0.35,
+		"balanceRecoverPerSec": 0.02,
+		"stunDecayPerSec": 0.05,
+		"fallThreshold": 0.75,
+		"maxTotalDamage": 100.0
+	}
+}
