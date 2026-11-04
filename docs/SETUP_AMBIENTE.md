@@ -1,131 +1,143 @@
 # Setup do Ambiente
 
-Objetivo: deixar a máquina pronta para a Fase 2 (protótipo visual).
-Tudo instalado em **D:\** conforme decidido.
+**Atualizado após inspeção real da máquina.** A versão anterior deste documento
+estava errada: a engine **já está instalada**.
 
 ---
 
-## 1. Situação atual (medida em 03/11/2026)
+## 1. Estado real
 
 | Componente | Status |
 |---|---|
-| Windows 11 Pro | OK |
-| AMD Ryzen 7 5700X · 32 GB RAM | OK |
+| Windows 11 Pro (build 26300) | OK |
+| AMD Ryzen 7 5700X · 8C/16T | OK |
+| 32 GB RAM | OK |
 | RTX 4060 8 GB · driver 621.01 | OK |
-| Epic Games Launcher | Instalado |
-| **Unreal Engine 5** | **Não instalado** |
-| **Visual Studio 2022 + C++** | **Ausente** (só sobraram pastas vazias — sem `cl.exe`, sem MSBuild, sem Windows SDK) |
+| **Unreal Engine 5.8.4** | **Instalada em `D:\UE_5.8`** |
+| MetaHuman Character (Creator in-engine) | **Presente** (6,4 GB de conteúdo) |
 | OBS Studio | Instalado |
-| Node.js 24.18.0 | OK |
-| Git 2.49.0 | OK |
+| Node.js 24.18.0 · Git 2.49 | OK |
+| **Windows SDK** | **AUSENTE** |
+| **MSVC x64 (Hostx64)** | **AUSENTE** |
 
----
+### O que o compilador disse
 
-## 2. Matemática do disco — leia antes de instalar
-
-Estado: **C: 21,4 GB livres · D: 109,0 GB livres**.
-
-Consumo mínimo do projeto:
-
-| Item | Espaço | Onde |
-|---|---|---|
-| UE 5.6 (sem símbolos de debug, sem source) | 45–55 GB | D: |
-| MetaHuman Creator Core Data | 8–12 GB | D: |
-| Visual Studio 2022 + workload C++ de jogos | 20–25 GB | D: |
-| Projeto + Content + MetaHuman | 6–10 GB | D: |
-| DDC (derived data — **cresce durante o uso**) | 15–40 GB | D: |
-| **Total em D:** | **94–142 GB** | |
-| **Livre em D: hoje** | **109 GB** | |
-
-**Conclusão:** o mínimo cabe com aperto, o realista **não** cabe. Além disso o C:
-com 21 GB livres vai sofrer com pagefile e temporários durante a compilação de
-shaders — o Windows precisa de folga.
-
-### Ação necessária
-
-| Meta | Mínimo aceitável | Recomendado |
-|---|---|---|
-| Livre em D: | **140 GB** | 200 GB |
-| Livre em C: | **35 GB** | 50 GB |
-
-Ou seja: liberar **~35 GB em D:** e **~15 GB em C:**, **ou** instalar um SSD
-extra. Sem isso, a instalação vai falhar no meio (e uma engine instalada pela
-metade dá erro de forma confusa).
-
-Nada aqui é contornável por software: engine e toolchain não podem ser instalados
-parcialmente.
-
----
-
-## 3. Instalação do Unreal Engine 5.6
-
-1. Abra o **Epic Games Launcher** e faça login (conta gratuita).
-2. **Unreal Engine → Library → +** e escolha a versão **5.6** (ou a 5.7, se já
-   estiver disponível e estável — decidiremos juntos).
-3. Clique em **Options** e **desmarque**:
-   - `Engine Source` (economiza ~25 GB)
-   - `Editor symbols for debugging` (economiza ~30 GB)
-4. **Marque**:
-   - `MetaHuman Creator Core Data` ← **obrigatório**. Sem isso o Creator abre com
-     a edição de pele desabilitada.
-5. Instale em `D:\Epic\UE_5.6`.
-6. Após instalar, dentro do editor: `Edit → Plugins` → habilitar
-   **MetaHuman** e **MetaHuman Creator** → reiniciar o editor.
-
----
-
-## 4. Instalação do Visual Studio 2022
-
-Sem isso não há C++, e o projeto UE nem gera os arquivos de solução.
-
-1. Baixe **Visual Studio Community 2022** (gratuito).
-2. Workload obrigatório: **Desenvolvimento de jogos com C++**.
-3. Componentes individuais a confirmar:
-   - `MSVC v143 – VS 2022 C++ x64/x86 build tools`
-   - `Windows 11 SDK` (10.0.22621 ou superior)
-   - `.NET desktop development` (para ferramentas auxiliares)
-4. Instale em `D:\Microsoft Visual Studio\2022\Community`.
-5. **Não** instale workloads de web/mobile — só consomem disco.
-
----
-
-## 5. Pós-instalação
-
-```powershell
-# DDC e intermediates no D:, para não encher o C:
-setx UE_LocalDDC "D:\Epic\DDC"
-setx UE_SharedDDC "D:\Epic\DDC\Shared"
+```
+Platform Win64 is not a valid platform to build. SDK validation failed:
+  Sdk: not found. Required version 10.0.19041.0.
 ```
 
-- DDC (Derived Data Cache) guarda shaders compilados. Fica em `D:` para não
-  consumir o C:. Vai crescer: limpar periodicamente é normal.
-- Pagefile: mantém no C: (padrão). Só mexa se o C: ficar sem espaço.
+Traduzindo: falta o **Windows SDK**. Além disso, o MSVC instalado
+(`14.51.36231`, dentro do *Visual Studio Build Tools 2026*) só tem o conjunto
+**x86** — não tem `Hostx64/cl.exe`, que é o que a engine usa.
+
+A engine exige (`Engine/Config/Windows/Windows_SDK.json`):
+
+| Requisito | Versão |
+|---|---|
+| Windows SDK principal | 10.0.22621.0 |
+| Windows SDK mínimo | 10.0.19041.0 |
+| MSVC mínimo | 14.38.33130 |
 
 ---
 
-## 6. Verificação
+## 2. Correção (precisa de administrador)
 
-Quando terminar, rode e me envie a saída:
+Dois caminhos. O primeiro é mais rápido.
+
+### Opção A — Interface (mais simples)
+
+1. Abra o **Visual Studio Installer**.
+2. Em *Ferramentas de Build do Visual Studio 2026*, clique em **Modificar**.
+3. Marque **Desenvolvimento de área de trabalho com C++**.
+4. Em *Componentes individuais*, confirme:
+   - `MSVC v143/v14x – build tools x64/x86` (o que traz o **Hostx64**)
+   - `Windows 11 SDK (10.0.22621.0)`
+5. Instalar. Cerca de 6–9 GB.
+
+### Opção B — Linha de comando (PowerShell como Administrador)
 
 ```powershell
-Get-ChildItem 'D:\Epic\UE_5.6\Engine\Binaries\Win64\UnrealEditor.exe' | Select-Object FullName,Length
+& "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" modify `
+  --installPath "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools" `
+  --add Microsoft.VisualStudio.Workload.VCTools `
+  --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+  --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
+  --includeRecommended --passive --norestart
+```
+
+Se a 22621 não estiver disponível no catálogo, use
+`Microsoft.VisualStudio.Component.Windows11SDK.26100` — a engine aceita qualquer
+SDK entre 19041 e 9.99999.
+
+### Verificação
+
+```powershell
+# deve imprimir um caminho
 & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-Get-PSDrive -PSProvider FileSystem | Select-Object Name,@{n='FreeGB';e={[math]::Round($_.Free/1GB,1)}}
+
+# deve listar 10.0.22621.0 (ou 26100)
+Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Include' | Select-Object Name
+
+# deve existir
+Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\*\bin\Hostx64\x64\cl.exe'
 ```
 
-Esperado: caminho do editor, caminho do VS, e livre em D: ≥ 40 GB após instalar.
+### Se o MSVC 14.51 for rejeitado
+
+A engine prefere `14.50.x` (VS2026 18.0) ou `14.44.x` (VS2022 17.14). O 14.51
+passa no mínimo exigido, mas se o UBT reclamar, instale o toolset exato:
+
+```powershell
+--add Microsoft.VisualStudio.Component.VC.14.50.18.0.x86.x64
+```
 
 ---
 
-## 7. O que eu faço em paralelo
+## 3. Compilar
 
-Enquanto o download roda (1–3 h), posso adiantar sem depender da engine:
+```powershell
+& 'D:\UE_5.8\Engine\Build\BatchFiles\Build.bat' LiveBeatdownEditor Win64 Development `
+  -Project='C:\Projetos\LiveBeatdown\Game\LiveBeatdown.uproject' -WaitMutex
+```
 
-- estrutura do repositório (`.gitignore`, pastas de módulos);
-- **bridge Node/TypeScript** com os adaptadores e o simulador local — é
-  totalmente testável sem TikTok e sem UE;
-- contrato de eventos e esquemas de configuração (`gifts.json`, `attacks.json`);
-- `docs/ARQUITETURA.md` com o mapa de módulos e o fluxo de dados.
+Primeira compilação: 5–15 min (shaders não entram aqui, só C++).
 
-Isso significa que, quando a engine estiver pronta, a Fase 2 começa direto no
-visual, sem perder tempo em encanamento.
+## 4. Abrir
+
+```powershell
+& 'D:\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe' 'C:\Projetos\LiveBeatdown\Game\LiveBeatdown.uproject'
+```
+
+Na primeira abertura, habilite os plugins **MetaHuman** e **MetaHuman Creator**
+(`Edit → Plugins`) e reinicie.
+
+---
+
+## 5. Gasto de disco
+
+| Item | Espaço |
+|---|---|
+| UE 5.8 já instalada | ~60 GB (em D:) |
+| MetaHuman Core Data | 6,4 GB (já incluso) |
+| Correção do toolchain | 6–9 GB |
+| Projeto + DDC | 15–40 GB (cresce) |
+
+Livre hoje: **C: 30,1 GB · D: 109 GB**. Cabe, mas o DDC vai crescer. Se apertar:
+
+```powershell
+setx UE_LocalDDC "D:\Epic\DDC"
+```
+
+---
+
+## 6. Configuração de performance já aplicada
+
+`Game/Config/DefaultEngine.ini` já traz o orçamento de VRAM:
+
+- sem Lumen, sem ray tracing, sem reflexos dinâmicos
+- sombra virtual desligada
+- `t.MaxFPS=30`, VSync off
+- pool de texturas em 5 GB
+- sombra de fios de cabelo desligada
+- `r.ScreenPercentage=100`
