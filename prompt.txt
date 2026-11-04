@@ -1,0 +1,569 @@
+# PROJETO: LIVE BEATDOWN — JOGO 3D INTERATIVO PARA TIKTOK LIVE
+
+## 1. OBJETIVO
+
+Desenvolva um jogo 3D interativo para transmissões ao vivo no TikTok.
+
+A proposta é criar uma experiência em que os espectadores controlam, coletivamente, as ações realizadas contra um personagem humano virtual.
+
+Os espectadores poderão:
+- Enviar presentes para provocar golpes.
+- Comentar comandos para executar ações.
+- Combinar presentes para provocar sequências de golpes.
+- Participar simultaneamente, competindo ou colaborando para provocar mais danos.
+- Acompanhar em tempo real o estado físico e visual do personagem.
+
+O conceito é um simulador de pancadaria com física realista, humor e danos visuais progressivos.
+
+**Não quero um jogo 2D, um boneco de desenho animado ou uma apresentação simples com imagens sobrepostas. Quero um jogo 3D de verdade.**
+
+## 2. CONFIGURAÇÃO DO COMPUTADOR
+
+O projeto precisa funcionar localmente neste computador:
+
+- Sistema operacional: Windows 11.
+- GPU: NVIDIA GeForce RTX 4060, 8 GB VRAM.
+- CPU: identificar automaticamente.
+- Memória RAM: identificar automaticamente.
+- Armazenamento: identificar espaço disponível.
+
+Não dependa de servidores pagos, APIs de IA pagas ou processamento em nuvem para executar o jogo.
+
+Toda a renderização e simulação devem acontecer localmente.
+
+Antes de escolher as tecnologias, analise as capacidades reais da máquina.
+
+## 3. ESCOLHA TECNOLÓGICA
+
+Você tem liberdade para escolher qualquer linguagem, engine ou framework.
+
+Priorize:
+
+1. Unreal Engine 5, preferencialmente com C++ e Blueprints.
+2. MetaHuman ou personagem humano 3D de qualidade equivalente.
+3. Chaos Physics para simulação física.
+4. Sistema de animação com Animation Blueprints.
+5. Integração externa por Node.js, Python ou outra tecnologia adequada.
+6. OBS Studio para captura e transmissão.
+
+Caso outra tecnologia permita atingir qualidade visual superior com melhor desempenho, apresente uma justificativa técnica antes de escolher.
+
+Não escolha tecnologias apenas por familiaridade.
+
+4. PERSONAGEM PRINCIPAL
+
+Crie um personagem humano 3D extremamente realista, com aparência visual muito semelhante à figura pública brasileira Luiz Inácio Lula da Silva.
+
+A intenção é reproduzir fielmente suas características físicas e faciais, criando uma representação virtual reconhecível.
+
+Características físicas
+
+Homem idoso, aproximadamente 80 anos.
+Rosto arredondado e expressivo.
+Cabelos brancos, curtos e com pouco volume.
+Barba branca característica, com formato e comprimento semelhantes aos dele.
+Testa larga.
+Sobrancelhas grisalhas.
+Olhos pequenos e expressivos.
+Nariz largo e arredondado.
+Bochechas volumosas.
+Formato do maxilar e queixo semelhantes aos da referência.
+Tom de pele e textura natural.
+Estrutura corporal de um homem idoso, com proporções realistas.
+
+Fidelidade visual
+
+Utilize fotografias na pasta (C:\Projetos\LiveBeatdown\referencia_visual) de referência para reproduzir as características faciais.
+
+Não crie um personagem genérico de homem idoso. A semelhança facial deve ser uma prioridade absoluta.
+
+O personagem deve possuir:
+
+Geometria facial detalhada.
+
+Textura de pele com poros e rugas naturais.
+
+Barba e cabelos com fios individualizados.
+
+Olhos realistas.
+
+Rig facial completo.
+
+Expressões faciais dinâmicas.
+
+Animações corporais naturais.
+
+Sistema de deformação facial para expressões de impacto.
+
+Sistema de animação e expressões
+
+O personagem deverá conseguir:
+
+Demonstrar surpresa.
+
+Fazer expressões de dor.
+
+Ficar assustado.
+
+Demonstrar tontura.
+
+Piscar naturalmente.
+
+Movimentar os olhos.
+
+Fazer expressões engraçadas.
+
+Reagir aos impactos com expressões faciais convincentes.
+
+Aparência durante a partida
+
+A aparência original deve permanecer reconhecível mesmo quando o personagem acumular danos visuais.
+
+Os olhos roxos, inchaços cenográficos, curativos e demais efeitos devem ser aplicados sem descaracterizar completamente o rosto.
+
+Qualidade obrigatória
+
+O resultado precisa parecer um ser humano real renderizado em Unreal Engine 5, e não um personagem cartunesco.
+
+Utilize MetaHuman ou uma solução equivalente que permita atingir alto nível de fidelidade facial.
+
+O personagem deve ficar inicialmente em pé, olhando para a câmera, dentro de um cenário.
+
+Ele precisa reagir aos acontecimentos de maneira convincente.
+
+Não quero aparência de boneco de plástico, robô ou personagem low-poly.
+
+## 5. SISTEMA DE GOLPES
+
+Implemente diferentes tipos de ataques.
+
+Exemplos:
+
+- Soco direto.
+- Tapa.
+- Paulada.
+- Chute.
+- Empurrão.
+- Golpe especial.
+- Sequência de golpes.
+
+Cada ataque deve possuir:
+
+- Animação própria.
+- Intensidade.
+- Direção do impacto.
+- Região atingida.
+- Reação corporal.
+- Reação facial.
+- Efeito sonoro.
+- Efeito visual.
+- Aplicação de física.
+
+O golpe deve atingir efetivamente o personagem.
+
+Não basta executar uma animação genérica de personagem balançando.
+
+Utilize colisões, pontos de impacto, física e animações sincronizadas para produzir resultados convincentes.
+
+## 6. SISTEMA DE DANOS PROGRESSIVOS
+
+Este é um dos recursos mais importantes do projeto.
+
+Os danos devem ser acumulativos e persistentes durante a rodada.
+
+Implemente danos visuais por regiões:
+
+**Rosto:**
+- Vermelhidão.
+- Olho roxo.
+- Inchaço na bochecha.
+- Marcas de impacto.
+- Curativos.
+- Dente cenográfico quebrado.
+- Expressões de dor e desorientação.
+
+**Corpo:**
+- Marcas de impacto.
+- Postura alterada.
+- Dificuldade de equilíbrio.
+- Reações de dor.
+- Movimentos limitados temporariamente.
+
+Utilize materiais dinâmicos, decalques, morph targets, blend shapes ou técnicas equivalentes.
+
+O sistema precisa acompanhar o estado de cada região do personagem.
+
+Exemplo:
+
+- `faceDamage`
+- `leftEyeDamage`
+- `rightEyeDamage`
+- `mouthDamage`
+- `bodyDamage`
+- `balance`
+- `stunLevel`
+
+Os valores devem evoluir de acordo com os impactos.
+
+Os efeitos visuais não podem simplesmente desaparecer quando termina uma animação.
+
+Os danos devem ser controlados individualmente e permanecer visíveis até o encerramento da rodada.
+
+Mantenha tudo em um estilo de violência fictícia e não gráfica, sem ferimentos abertos ou gore.
+
+## 7. FÍSICA E REAÇÕES
+
+Utilize física realista.
+
+O personagem precisa:
+
+- Perder o equilíbrio conforme a intensidade dos impactos.
+- Cambalear.
+- Virar a cabeça na direção do golpe.
+- Recuar.
+- Cair.
+- Apoiar as mãos no chão.
+- Levantar com dificuldade.
+- Ficar tonto.
+- Reagir de maneiras diferentes conforme a região atingida.
+
+Implemente ragdoll com transição entre animação e física.
+
+Evite que o personagem atravesse o chão, objetos ou outras partes do próprio corpo.
+
+As transições devem ser suaves.
+
+## 8. INTEGRAÇÃO COM TIKTOK LIVE
+
+Crie um sistema independente responsável por receber eventos da LIVE.
+
+A integração deverá suportar:
+
+- Presentes.
+- Comentários.
+- Identificação do espectador.
+- Quantidade de presentes.
+- Combos de presentes.
+- Eventos simultâneos.
+
+Não presuma que existe uma API oficial pública para todos esses eventos.
+
+Pesquise as alternativas reais disponíveis, respeitando os termos e limitações do TikTok.
+
+Implemente a integração por meio de um adaptador independente, permitindo trocar a biblioteca ou o fornecedor futuramente.
+
+O jogo não pode depender diretamente da biblioteca de conexão com o TikTok.
+
+Arquitetura desejada:
+
+TikTok LIVE
+    ↓
+Conector de eventos
+    ↓
+Sistema de interpretação
+    ↓
+Fila de eventos
+    ↓
+Motor de jogo
+    ↓
+Personagem 3D
+
+Crie também um modo de simulação local para testar presentes e comentários sem precisar iniciar uma transmissão.
+
+## 9. MAPEAMENTO DE PRESENTES
+
+Crie um painel administrativo para configurar os presentes.
+
+Exemplo inicial:
+
+| Presente | Ação |
+|---|---|
+| Rosa | Paulada |
+| Coração | Tapa |
+| Presente simples | Soco |
+| Presente médio | Chute |
+| Presente especial | Sequência de golpes |
+| Presente raro | Golpe cinematográfico |
+
+Essas configurações não devem ficar espalhadas pelo código.
+
+O administrador deverá conseguir alterar:
+- Presente.
+- Tipo de golpe.
+- Intensidade.
+- Animação.
+- Efeito sonoro.
+- Efeito visual.
+- Multiplicador de dano.
+
+Quando um espectador enviar vários presentes, implemente um sistema de combos.
+
+Exemplo: 5 rosas podem provocar uma sequência de cinco pauladas, com animações e reações individuais.
+
+## 10. SISTEMA DE EVENTOS SIMULTÂNEOS
+
+Todos os espectadores devem participar da mesma partida.
+
+Não quero que um evento bloqueie os demais.
+
+Implemente:
+- Fila de eventos.
+- Priorização por intensidade.
+- Agrupamento de eventos repetidos.
+- Combos.
+- Controle de spam.
+- Limite de animações simultâneas.
+- Sistema de cooldown.
+- Identificação de espectadores.
+
+Quando muitos presentes chegarem juntos, o jogo deve continuar funcionando sem travar.
+
+Não descarte presentes silenciosamente: eventos agrupados precisam preservar suas quantidades e contabilização.
+
+## 11. INTERFACE VISUAL
+
+A transmissão deverá funcionar em formato vertical 9:16.
+
+Resolução desejada: 1080 × 1920.
+
+O personagem deve ocupar a maior parte da tela.
+
+A interface precisa ser bonita, moderna e cinematográfica.
+
+Elementos desejados:
+
+- Personagem centralizado.
+- Nome do espectador que provocou o último golpe.
+- Animação visual do presente recebido.
+- Contador de golpes.
+- Barra de resistência.
+- Indicador de danos.
+- Ranking dos espectadores.
+- Combo atual.
+- Animações de entrada e saída.
+- Efeitos de impacto.
+
+Evite excesso de informações na tela.
+
+A interface precisa parecer um jogo comercial profissional.
+
+## 12. CENÁRIO
+
+Crie um ambiente 3D convincente.
+
+Sugestão inicial:
+
+- Ambiente de estúdio ou arena.
+- Iluminação cinematográfica.
+- Sombras realistas.
+- Materiais PBR.
+- Câmera com enquadramento adequado.
+- Fundo visualmente interessante, mas sem competir com o personagem.
+
+O cenário deverá permitir futuras personalizações.
+
+## 13. ÁUDIO
+
+Implemente efeitos sonoros sincronizados:
+
+- Socos.
+- Tapas.
+- Pauladas.
+- Impactos.
+- Reações do personagem.
+- Quedas.
+- Movimentação corporal.
+- Sons de combo.
+
+O áudio precisa variar conforme a intensidade e o tipo de golpe.
+
+Evite repetir exatamente o mesmo som em todos os ataques.
+
+## 14. CICLO DA PARTIDA
+
+Implemente um sistema completo de rodadas.
+
+Fluxo:
+
+1. Início da partida.
+2. Personagem entra em cena.
+3. Participantes começam a enviar presentes e comentários.
+4. Personagem recebe os golpes.
+5. Danos acumulam.
+6. Personagem começa a apresentar dificuldades.
+7. Acontecem quedas e reações especiais.
+8. Finalização da rodada.
+9. Exibição de estatísticas.
+10. Reinicialização do personagem.
+
+Ao finalizar uma rodada, apresente:
+- Total de golpes.
+- Total de presentes.
+- Espectador que mais contribuiu.
+- Maior combo.
+- Duração da partida.
+
+O personagem deve voltar ao estado original somente no início de uma nova rodada.
+
+## 15. PAINEL DE CONTROLE
+
+Crie uma interface administrativa independente do jogo.
+
+Ela deverá permitir:
+
+- Iniciar e encerrar partidas.
+- Reiniciar personagem.
+- Ativar modo de simulação.
+- Enviar golpes manualmente.
+- Configurar presentes.
+- Ajustar intensidade dos golpes.
+- Alterar configurações gráficas.
+- Visualizar eventos recebidos.
+- Visualizar erros de conexão.
+- Ativar e desativar efeitos.
+- Consultar estatísticas.
+
+O painel deverá permitir testar tudo sem TikTok.
+
+## 16. DESEMPENHO
+
+O projeto deverá priorizar estabilidade.
+
+Metas iniciais:
+
+- 1080 × 1920.
+- 30 FPS estáveis.
+- Uso otimizado dos 8 GB de VRAM.
+- Carregamento antecipado de animações e efeitos.
+- Evitar carregamentos durante a transmissão.
+- Evitar vazamentos de memória.
+- Não bloquear a thread principal com eventos externos.
+
+Utilize LODs, otimização de materiais, iluminação otimizada e gerenciamento de partículas.
+
+Não utilize ray tracing ou efeitos pesados sem necessidade.
+
+## 17. ORGANIZAÇÃO DO PROJETO
+
+Organize o código em módulos independentes:
+
+- CharacterSystem
+- DamageSystem
+- PhysicsSystem
+- AnimationSystem
+- TikTokConnector
+- GiftSystem
+- CommentSystem
+- EventQueue
+- AudioSystem
+- UIController
+- MatchManager
+- StatisticsSystem
+- AdminPanel
+
+Evite concentrar toda a lógica em um único arquivo.
+
+Utilize configurações externas para presentes, animações, efeitos e parâmetros.
+
+Documente como iniciar o projeto.
+
+## 18. METODOLOGIA DE DESENVOLVIMENTO
+
+Não tente construir tudo de uma vez.
+
+Trabalhe em etapas:
+
+**FASE 1 — Pesquisa e planejamento**
+- Avalie o hardware.
+- Escolha a engine.
+- Pesquise personagens e recursos 3D.
+- Defina a arquitetura.
+- Identifique dependências e custos.
+
+**FASE 2 — Protótipo visual**
+- Criar cenário.
+- Inserir personagem.
+- Configurar câmera.
+- Configurar iluminação.
+- Atingir o padrão visual desejado.
+
+**FASE 3 — Mecânica**
+- Golpes.
+- Animações.
+- Colisões.
+- Física.
+- Danos progressivos.
+- Quedas.
+
+**FASE 4 — Integração**
+- Conector TikTok.
+- Presentes.
+- Comentários.
+- Eventos simultâneos.
+- Combos.
+
+**FASE 5 — Interface**
+- HUD.
+- Ranking.
+- Painel administrativo.
+- Estatísticas.
+
+**FASE 6 — Otimização e testes**
+- Testar 100 eventos consecutivos.
+- Testar eventos simultâneos.
+- Testar quedas e recuperação.
+- Verificar danos persistentes.
+- Medir FPS e uso de VRAM.
+- Testar transmissão pelo OBS.
+
+## 19. REGRAS IMPORTANTES
+
+1. Não entregue apenas um protótipo visual com botões falsos.
+2. Não utilize imagens estáticas para simular animações.
+3. Não simule física com movimentos pré-programados quando uma solução física for viável.
+4. Não faça o personagem voltar ao normal depois de cada golpe.
+5. Não utilize modelos humanos de baixa qualidade.
+6. Não dependa de serviços pagos para executar o jogo.
+7. Não invente funcionalidades de integração com TikTok.
+8. Não esconda limitações técnicas.
+9. Não comece a desenvolver todas as fases antes de validar a arquitetura.
+10. Não sacrifique qualidade visual sem antes avaliar alternativas de otimização.
+
+## 20. PRIMEIRA TAREFA
+
+Antes de escrever qualquer código:
+
+Faça uma análise técnica completa do projeto.
+
+Apresente:
+
+1. Qual engine utilizar e por quê.
+2. Qual linguagem utilizar.
+3. Como conseguir um personagem humano extremamente realista.
+4. Como implementar danos progressivos no rosto.
+5. Como implementar física e ragdoll.
+6. Como receber eventos da LIVE.
+7. Como manter o jogo funcionando na RTX 4060.
+8. Quais ferramentas e recursos serão necessários.
+9. Quais recursos são gratuitos e quais podem ter custos.
+10. Uma estimativa realista de dificuldade e tempo de desenvolvimento.
+
+Depois apresente a arquitetura completa e um plano de execução.
+
+**A prioridade absoluta é qualidade visual, realismo físico e uma experiência que faça os espectadores quererem continuar enviando presentes para ver o que acontece com o personagem.**
+
+Quero um produto com aparência de jogo profissional, não um projeto experimental de programação.
+
+Danos visuais moderados
+
+Olho roxo, vermelhidão, inchaço cenográfico e curativos. Sem sangue abundante, feridas abertas ou mutilações.
+Recomendado
+
+Física e humor
+
+Quedas exageradas, cambaleios, expressões engraçadas e recuperação desajeitada.
+Recomendado
+
+Golpes especiais
+
+Efeitos de impacto, câmera dinâmica, partículas e animações cinematográficas, sem representar sofrimento gráfico.

@@ -1,0 +1,52 @@
+# ---------- Unreal Engine ----------
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+*.VC.db
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+Build/Receipts/
+*.Build.cs.cache
+*.target.cs.cache
+
+# ---------- Node / bridge / painel ----------
+node_modules/
+dist/
+build/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+*.tsbuildinfo
+
+# ---------- Dados locais ----------
+# log bruto de eventos, banco do bridge
+data/
+*.sqlite
+*.sqlite-journal
+*.jsonl
+logs/
+
+# ---------- Referências visuais ----------
+# Material de referência de pessoa real: não versionar, não usar no build.
+referencia_visual/
+
+# ---------- Sistema / editor ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.local
+*.local
+
+# ---------- Builds ----------
+*.exe
+*.dll
+*.pdb
+!Bridge/tools/**
