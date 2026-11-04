@@ -151,9 +151,13 @@ void ULBConfigSubsystem::ParseAttacks(const TSharedPtr<FJsonObject>& Root)
 		}
 		const TSharedPtr<FJsonObject>& Entry = *EntryPtr;
 
+		// Em UE 5.8 as chaves de FJsonObject::Values sao UE::FSharedString,
+		// nao FString. Convertemos uma vez e trabalhamos com FString.
+		const FString AttackKey(*Pair.Key);
+
 		FLBAttackDef Def;
-		Def.Id = FName(*Pair.Key);
-		Def.Label = FText::FromString(ReadString(Entry, TEXT("label"), Pair.Key));
+		Def.Id = FName(*AttackKey);
+		Def.Label = FText::FromString(ReadString(Entry, TEXT("label"), AttackKey));
 
 		const FString MontagePath = ReadString(Entry, TEXT("montage"));
 		if (!MontagePath.IsEmpty())
@@ -219,7 +223,7 @@ void ULBConfigSubsystem::ParseGifts(const TSharedPtr<FJsonObject>& Root)
 		const TSharedPtr<FJsonObject>& Entry = *EntryPtr;
 
 		FLBGiftMapping Mapping;
-		Mapping.GiftName = Pair.Key;
+		Mapping.GiftName = FString(*Pair.Key);
 		Mapping.AttackId = FName(*ReadString(Entry, TEXT("attack")));
 		Mapping.DamageMultiplier = FMath::Max(0.0f, ReadFloat(Entry, TEXT("damageMultiplier"), 1.0f));
 		Mapping.bEnabled = ReadBool(Entry, TEXT("enabled"), true);
@@ -231,11 +235,11 @@ void ULBConfigSubsystem::ParseGifts(const TSharedPtr<FJsonObject>& Root)
 
 		if (Mapping.AttackId.IsNone())
 		{
-			UE_LOG(LogLB, Warning, TEXT("Presente '%s' sem golpe associado; ignorado"), *Pair.Key);
+			UE_LOG(LogLB, Warning, TEXT("Presente '%s' sem golpe associado; ignorado"), *Mapping.GiftName);
 			continue;
 		}
 
-		GiftMappings.Add(NormalizeGiftKey(Pair.Key), Mapping);
+		GiftMappings.Add(NormalizeGiftKey(Mapping.GiftName), Mapping);
 	}
 }
 

@@ -17,10 +17,11 @@ estava errada: a engine **já está instalada**.
 | MetaHuman Character (Creator in-engine) | **Presente** (6,4 GB de conteúdo) |
 | OBS Studio | Instalado |
 | Node.js 24.18.0 · Git 2.49 | OK |
-| **Windows SDK** | **AUSENTE** |
-| **MSVC x64 (Hostx64)** | **AUSENTE** |
+| **Windows SDK** | **OK** — 10.0.22621.0 e 10.0.26100.0 |
+| **MSVC x64 (Hostx64)** | **OK** — 14.51.36231 |
+| **.NET Framework 4.6.2 SDK (NETFXSDK)** | **OK** — `Windows Kits\NETFXSDK\4.6.2` |
 
-### O que o compilador disse
+### O que o compilador dizia
 
 ```
 Platform Win64 is not a valid platform to build. SDK validation failed:
@@ -92,16 +93,75 @@ passa no mínimo exigido, mas se o UBT reclamar, instale o toolset exato:
 --add Microsoft.VisualStudio.Component.VC.14.50.18.0.x86.x64
 ```
 
+### NETFXSDK — o segundo bloqueio (já resolvido)
+
+Depois do SDK, o UBT para em:
+
+```
+Unable to instantiate module 'SwarmInterface': Could not find NetFxSDK install dir;
+this will prevent SwarmInterface from installing.
+Install a version of .NET Framework SDK at 4.6.0 or higher.
+```
+
+O Windows SDK **não** traz o .NET Framework SDK. O UBT procura, nesta ordem:
+`Engine/Extras/...` → registro `Microsoft\Microsoft SDKs\NETFXSDK\{4.6.2|4.6.1|4.6}`
+→ e valida a existência de `Include\um\mscoree.h`.
+
+O jeito mais leve (≈80 MB, sem tocar no Visual Studio):
+
+```powershell
+winget install --id Microsoft.DotNet.Framework.DeveloperPack.4.6 --exact --silent
+```
+
+Verificação:
+
+```powershell
+Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\NETFXSDK\4.6.2' |
+  Select-Object KitsInstallationFolder
+Test-Path 'C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.2\Include\um\mscoree.h'  # True
+```
+
+> O pacote instala em `Windows Kits\NETFXSDK\4.6.2` (sem o `10\`). É o caminho
+> que o registro aponta, então funciona.
+
 ---
 
 ## 3. Compilar
 
 ```powershell
 & 'D:\UE_5.8\Engine\Build\BatchFiles\Build.bat' LiveBeatdownEditor Win64 Development `
-  -Project='C:\Projetos\LiveBeatdown\Game\LiveBeatdown.uproject' -WaitMutex
+  -Project='C:\Projetos\LiveBeatdown\Game\LiveBeatdown.uproject' -WaitMutex -NoHotReload
 ```
 
 Primeira compilação: 5–15 min (shaders não entram aqui, só C++).
+
+### Se aparecer "Unable to build while Live Coding is active"
+
+Basta ter **qualquer** editor da engine aberto (mesmo de outro projeto) para a
+checagem global de Live Coding disparar. Adicione:
+
+```powershell
+-NoHotReloadFromIDE
+```
+
+Isso ignora a checagem. É seguro quando o projeto aberto é outro — as DLLs do
+nosso projeto não estão carregadas por ninguém.
+
+### Se aparecer C1076 / C3859 ("limite de heap interno" / "páginação muito pequena")
+
+Os compiladores paralelos estouram o limite de commit do Windows (32 GB de RAM +
+3,6 GB de page file). O UBA ainda mata processos acima de 37 GB, o que produz
+erros de PCH que **não** são erro de código.
+
+Reduza o paralelismo:
+
+```powershell
+-MaxParallelActions=4
+```
+
+Se persistir, aumente o page file (`SystemPropertiesAdvanced → Desempenho →
+Avançado → Memória virtual`) para 16–32 GB em D:, reinicie e compile de novo.
+
 
 ## 4. Abrir
 
